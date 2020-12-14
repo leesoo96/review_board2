@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class DBUtils {
 
 	public static Connection getConn() throws ClassNotFoundException, SQLException {
-		final String URL = "jdbc:mysql://localhost:3306/review_board?serverTimezone=UTC";
+		final String URL = "jdbc:mysql://localhost:3306/review_board?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
 		final String USER = "root";
 		final String PW = "wls120239";
 		

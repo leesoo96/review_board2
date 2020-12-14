@@ -9,26 +9,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.LSJ.review.common.Utils;
 import com.LSJ.review.model.BoardVO;
-// 댓글, 삭제 남음
-@WebServlet("/List")
-public class BoardListSer extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
+@WebServlet("/Read")
+public class BoardReadSer extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int typ = Utils.getIntParam(request, "typ", 1);
-		int page = Utils.getIntParam(request, "page", 1);
-		System.out.println("typ = " + typ);
+		int typ = Utils.getIntParam(request, "typ");
+		int i_board = Utils.getIntParam(request, "i_board");
+		if(typ == 0 || i_board == 0) {
+			Utils.forwardErr(request, response);
+			return;
+		}
 		
 		BoardVO param = new BoardVO();
 		param.setTyp(typ);
-		param.setRowCntPerPage(5); // 목록 당 10개씩 보이도록 설정
+		param.setI_board(i_board);
 		
-		request.setAttribute("pageCnt", BoardService.pageCount(param));
+		BoardVO data = BoardService.read(param, request);
+		request.setAttribute("data", data);
+//		TODO 댓글 읽기 처리 부분
 		
-		request.setAttribute("typ", typ);
-		request.setAttribute("lists", BoardService.readList(param, page));
-	
-		Utils.forward("전체목록확인", "List", request, response);
+		Utils.forward(data.getTitle(), "Read", request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

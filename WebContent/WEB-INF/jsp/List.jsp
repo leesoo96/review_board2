@@ -22,8 +22,12 @@
 		</c:forEach>
 	</table>
 	
-	<div>
-		<!-- 페이징 -->
+	<div class="pageContainer">
+		<c:forEach begin="1" end="${pageCnt}" var="i">
+			<span class="page">
+				<a href="/List?typ=${typ}&page=${i}">${i}</a>
+			</span>
+		</c:forEach>
 	</div>
 	
 	<div>
