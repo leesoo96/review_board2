@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.LSJ.review.model.BoardCmtVO;
 import com.LSJ.review.model.BoardVO;
 
 public class BoardDAO {
@@ -95,6 +96,39 @@ public class BoardDAO {
 		
 		return list;
 	}	
+	
+//	댓글 목록 확인
+	public static List<BoardCmtVO> showCmtAll(final BoardVO param){
+		List<BoardCmtVO> list = new ArrayList<>();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = " SELECT i_cmt, ctnt FROM r_board_cmt_? "
+					 + " WHERE i_board = ? ORDER BY i_cmt DESC ";
+		
+		try {
+			conn = DBUtils.getConn();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, param.getTyp());
+			pstmt.setInt(2, param.getI_board());
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardCmtVO cv = new BoardCmtVO();
+				cv.setI_cmt(rs.getInt("i_cmt"));
+				cv.setCtnt(rs.getString("ctnt"));
+				
+				list.add(cv);
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		} finally {
+			DBUtils.close(conn, pstmt, rs);
+		}
+		
+		return list;
+	}
 	
 //	글 읽기
 	public static BoardVO readCtnt(final BoardVO param) {

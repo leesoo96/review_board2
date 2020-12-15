@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.LSJ.review.db.BoardDAO;
 import com.LSJ.review.db.SQLInterUpdate;
+import com.LSJ.review.model.BoardCmtVO;
 import com.LSJ.review.model.BoardVO;
 
 public class BoardService {
@@ -80,5 +81,41 @@ public class BoardService {
 			});
 		}
 		return BoardDAO.insertCtnt(param);
+	}
+	
+//	댓글목록 확인
+	public static List<BoardCmtVO> showCmtList(BoardVO param){
+		return BoardDAO.showCmtAll(param);
+	}
+	
+//	댓글쓰기
+	public static int insertCmt(BoardCmtVO param) {
+		String sql = " INSERT INTO r_board_cmt_? "
+					 + " (i_board, ctnt) VALUES (?, ?) ";
+		
+		return BoardDAO.myExecuteUpdate(sql, new SQLInterUpdate() {
+			
+			@Override
+			public void proc(PreparedStatement pstmt) throws SQLException {
+				pstmt.setInt(1, param.getTyp());
+				pstmt.setInt(2, param.getI_board());
+				pstmt.setString(3, param.getCtnt());
+			}
+		});
+	}
+	
+//	글 삭제
+	public static int delCtnt(BoardVO param) {
+		String sql = " DELETE FROM r_board_? "
+					 + " WHERE i_board = ? ";
+		
+		return BoardDAO.myExecuteUpdate(sql, new SQLInterUpdate() {
+			
+			@Override
+			public void proc(PreparedStatement pstmt) throws SQLException {
+				pstmt.setInt(1, param.getTyp());
+				pstmt.setInt(2, param.getI_board());
+			}
+		});
 	}
 }

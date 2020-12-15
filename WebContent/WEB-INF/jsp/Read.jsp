@@ -22,8 +22,25 @@
 		작성날짜 : ${data.r_dt }
 	</div>
 	
-	<div>
-		<!-- 댓글 목록 -->
+	<div style="margin-top:10px;">
+		<form action="/cmt" method="post">
+			<input type="hidden" name="typ" value="${data.typ }">
+			<input type="hidden" name="i_board" value="${data.i_board }">
+			댓글 : <input type="text" name="cmt_ctnt">
+			<input type="submit" value="댓글쓰기">
+		</form>
+	</div>
+	<div style="margin-top:5px;">
+		<table>
+			<tr>
+				<th>댓글 목록</th>
+			</tr>
+			<c:forEach items="${cmtCtnt }" var="item">
+				<tr>
+					<td>${item.ctnt }</td>
+				</tr>
+			</c:forEach>
+		</table>
 	</div>
 </div>
 

@@ -8,43 +8,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.LSJ.review.common.Utils;
-import com.LSJ.review.model.BoardVO;
+import com.LSJ.review.model.BoardCmtVO;
 
-@WebServlet("/Read")
-public class BoardReadSer extends HttpServlet {
+@WebServlet("/cmt")
+public class BoardCmtSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int typ = Utils.getIntParam(request, "typ");
-		int i_board = Utils.getIntParam(request, "i_board");
-		if(typ == 0 || i_board == 0) {
-			Utils.forwardErr(request, response);
-			return;
-		}
 		
-		BoardVO param = new BoardVO();
-		param.setTyp(typ);
-		param.setI_board(i_board);
-		
-		BoardVO data = BoardService.read(param, request);
-		request.setAttribute("data", data);
-		request.setAttribute("cmtCtnt", BoardService.showCmtList(param));
-		
-		Utils.forward(data.getTitle(), "Read", request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		글 삭제
+//		댓글 입력
 		int typ = Utils.getIntParam(request, "typ");
 		int i_board = Utils.getIntParam(request, "i_board");
+		String ctnt = request.getParameter("cmt_ctnt");
 		
-		BoardVO param = new BoardVO();
+		BoardCmtVO param = new BoardCmtVO();
 		param.setTyp(typ);
 		param.setI_board(i_board);
-
-		BoardService.delCtnt(param);
+		param.setCtnt(ctnt);
 		
-		response.sendRedirect("/List?typ=" + typ);
+		int result = BoardService.insertCmt(param);
+		
+		response.sendRedirect("/Read?typ=" + typ + "&i_board=" + i_board);
 	}
 
 }

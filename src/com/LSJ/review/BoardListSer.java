@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.LSJ.review.common.Utils;
 import com.LSJ.review.model.BoardVO;
-// 댓글, 삭제 남음
+
 @WebServlet("/List")
 public class BoardListSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
